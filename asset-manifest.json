@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/pune-samvaad/static/js/main.66c78396.js",
-    "static/js/453.d7b03c10.chunk.js": "/pune-samvaad/static/js/453.d7b03c10.chunk.js",
+    "main.js": "/pune-samvaad/static/js/main.68487216.js",
+    "static/js/453.19a57307.chunk.js": "/pune-samvaad/static/js/453.19a57307.chunk.js",
     "index.html": "/pune-samvaad/index.html",
-    "main.66c78396.js.map": "/pune-samvaad/static/js/main.66c78396.js.map",
-    "453.d7b03c10.chunk.js.map": "/pune-samvaad/static/js/453.d7b03c10.chunk.js.map"
+    "main.68487216.js.map": "/pune-samvaad/static/js/main.68487216.js.map",
+    "453.19a57307.chunk.js.map": "/pune-samvaad/static/js/453.19a57307.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.66c78396.js"
+    "static/js/main.68487216.js"
   ]
 }
