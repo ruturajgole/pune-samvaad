@@ -1,44 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import Carousel from './components/carousel';
+import {
+  About,
+  Events,
+  Gallery,
+  Homepage,
+  Suggestions
+} from "./pages";
+
+import {
+  Header,
+  Modal,
+  ModalProps,
+  UnderConstruction,
+} from "./components";
+import { getData } from './services/api';
+import { Page } from './services/models';
+
 
 const App: React.FC = () => {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Record<string, any>>({});
+  const [page, setPage] = useState<Page>(Page.Homepage);
+  const [modalProps, setModalProps] = useState<ModalProps | null>(null);
 
   useEffect(() => {
-    fetchData();
+    getData().then((data) => setData(data));
   }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch("https://17d0-2405-201-1007-143-d842-2ea9-9974-b53f.ngrok-free.app/data");
-      const data = await response.json();
-
-      setData(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   return (
     <div>
-      <div style={styles.header}>
-        <img src={"logo.jpeg"} style={styles.logo}/>
+      <Header setPage={setPage}/>
+      <div style={styles.page}>
+        {page === Page.Homepage &&
+          (!!data && <Homepage setModalProps={setModalProps} events={data.Events} testimonials={data.Testimonials} />)}
+        {page === Page.Events &&
+          <Events events={data.Events}/>}
+        {page === Page.About &&
+          <About text={data.AboutUs}/>}
+        {page === Page.Gallery &&
+          <Gallery />}
+        {page === Page.Suggestions &&
+          <Suggestions text={data.Suggestions}/>}
+        {page === Page.UnderConstruction &&
+          <UnderConstruction />}  
       </div>
-      {data.length && <Carousel events={data} interval={5000} />}
+      {modalProps && 
+        <Modal 
+          onClose={modalProps.onClose}
+          title={modalProps.title} 
+          children={modalProps.children} />}
     </div>
   );
 };
 
 const styles = {
-  header: {
-    padding: "0.5% 1%",
-    borderBottom: "outset"
-  },
-  logo: {
-    height: "10%",
-    width: "10%",
-    cursor: "pointer"
+  page: {
+    display: "flex",
+    flexDirection: "column",
+    height: "75vh"
   }
-};
+} as Record<string, React.CSSProperties>;
 
 export default App;
