@@ -11,20 +11,30 @@ interface Option {
 interface Props {
   options: ReadonlyArray<Option>;
   setPage: (page: Page) => void;
+  currentPage: Page;
 }
 
-export const NavigationBar = ({options, setPage}: Props) => {
+export const NavigationBar = ({currentPage, options, setPage}: Props) => {
   const [currentOptions, setActive] = useState(options);
 
   return <div style={styles.container}>
-    {currentOptions.map((option: Option) => 
+    {currentOptions.map((option: Option) =>
       <div key={option.title} style={styles.options}
         onMouseEnter={() => option.suboptions && setActive(options.map((value) => value.title === option.title ? ({...option, isActive: true}) : value))}
         onMouseLeave={() => option.suboptions && setActive(options.map((value) => value.title === option.title ? ({...option, isActive: false}) : value))}>
-        <span style={styles.option} onClick={() => setPage(option.page)}>{option.title}</span>
-        {option.isActive && 
+        <span
+          style={{...styles.option, color: currentPage === option.page ? "#e0452c" : "initial"}}
+          onClick={() => setPage(option.page)}>
+          {option.title}
+        </span>
+        {option.isActive &&
           <div style={styles.suboptions}>{option.suboptions?.map((suboption) =>
-            <span key={suboption.title} style={styles.suboption} onClick={() => setPage(suboption.page)}>{suboption.title}</span>)}
+            <span
+              key={suboption.title}
+              style={styles.suboption}
+              onClick={() => setPage(suboption.page)}>
+              {suboption.title}
+            </span>)}
           </div>}
       </div>
     )}

@@ -27,37 +27,35 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <Header setPage={setPage}/>
-      <div style={styles.page}>
-        {page === Page.Homepage &&
-          (!!data && <Homepage setModalProps={setModalProps} events={data.Events} testimonials={data.Testimonials} />)}
-        {page === Page.Events &&
-          <Events events={data.Events}/>}
-        {page === Page.About &&
-          <About text={data.AboutUs}/>}
-        {page === Page.Gallery &&
-          <Gallery />}
-        {page === Page.Suggestions &&
-          <Suggestions text={data.Suggestions}/>}
-        {page === Page.UnderConstruction &&
-          <UnderConstruction />}  
+      <div>
+        <Header currentPage={page} setPage={setPage}/>
+        <div style={styles(true)}>
+          {page === Page.Homepage &&
+            (!!data && <Homepage setModalProps={setModalProps} events={data.Events} testimonials={data.Testimonials} />)}
+          {page === Page.Events &&
+            <Events events={data.Events}/>}
+          {page === Page.About &&
+            <About text={data.AboutUs}/>}
+          {page === Page.Gallery &&
+            <Gallery />}
+          {page === Page.Suggestions &&
+            <Suggestions text={data.Suggestions}/>}
+          {page === Page.UnderConstruction &&
+            <UnderConstruction />}
+        </div>
+        {modalProps && 
+          <Modal 
+            onClose={modalProps.onClose}
+            title={modalProps.title} 
+            children={modalProps.children} />}
       </div>
-      {modalProps && 
-        <Modal 
-          onClose={modalProps.onClose}
-          title={modalProps.title} 
-          children={modalProps.children} />}
-    </div>
   );
 };
 
-const styles = {
+const styles = (isMobile: boolean): Record<string, React.CSSProperties> => ({
   page: {
-    display: "flex",
-    flexDirection: "column",
-    height: "75vh"
+    display: isMobile ? "flex" : "none"
   }
-} as Record<string, React.CSSProperties>;
-
+});
+ 
 export default App;

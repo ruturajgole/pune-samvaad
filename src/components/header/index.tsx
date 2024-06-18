@@ -15,7 +15,7 @@ const navigationOptions = [
   },
   {
     title: "Gallery",
-    page: Page.UnderConstruction,
+    page: Page.Gallery,
     suboptions: [
       { title: "Photos", page: Page.UnderConstruction }, { title: "Videos", page: Page.UnderConstruction }
     ]
@@ -31,20 +31,29 @@ const navigationOptions = [
 ]
 
 interface Props {
+  readonly currentPage: Page;
   readonly setPage: (page: Page) => void;
 }
 
-export const Header = ({ setPage }: Props) =>
+export const Header = ({ currentPage, setPage }: Props) =>
   <div style={styles.header}>
-    <div style={{display: "flex", justifyContent: "space-between"}}>
-      <img src={`${process.env.PUBLIC_URL}/logo.jpeg`} style={styles.logo} alt={"logo"}/>
+    <div style={styles.logoContainer}>
+      <img
+        onClick={() => setPage(Page.Homepage)}
+        src={`${process.env.PUBLIC_URL}/logo.jpeg`}
+        style={styles.logo}
+        alt={"logo"} />
     </div>
-    <NavigationBar setPage={setPage} options={navigationOptions} />
+    <NavigationBar currentPage={currentPage} setPage={setPage} options={navigationOptions} />
   </div>
 
 const styles = {
   header: {
-    padding: "0.5% 1%"
+    padding: "0.5% 1%",
+  },
+  logoContainer: {
+    display: "flex",
+    justifyContent: "space-between"
   },
   logo: {
     height: "8%",
