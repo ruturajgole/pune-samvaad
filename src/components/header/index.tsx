@@ -43,6 +43,9 @@ export const Header = ({ currentPage, setPage }: Props) =>
         src={`${process.env.PUBLIC_URL}/logo.jpeg`}
         style={styles.logo}
         alt={"logo"} />
+      <img
+        style={styles.banner}
+        src={`${process.env.PUBLIC_URL}/shaniwar-wada.jpg`} />
     </div>
     <NavigationBar currentPage={currentPage} setPage={setPage} options={navigationOptions} />
   </div>
@@ -59,5 +62,10 @@ const styles = {
     height: "8%",
     width: "8%",
     cursor: "pointer"
+  },
+  banner: {
+    height: "10%",
+    width: "10%",
+    alignSelf: "end"
   }
 } as Record<string, React.CSSProperties>;
