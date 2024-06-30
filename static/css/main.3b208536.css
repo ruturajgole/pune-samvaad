@@ -1,0 +1,2 @@
+.spinner{fill:#e0452c;animation:spinner_svv2 1s linear infinite;transform-origin:center}@keyframes spinner_svv2{to{transform:rotate(1turn)}}.spin{animation:spin 5s linear infinite,opacity 1s linear infinite}@keyframes opacity{0%{opacity:.5}50%{opacity:1}to{opacity:.5}}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}
+/*# sourceMappingURL=main.3b208536.css.map*/
