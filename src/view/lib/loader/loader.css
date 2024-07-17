@@ -1,0 +1,34 @@
+.spinner {
+  transform-origin: center;
+  animation: spinner_svv2 1s infinite linear;
+  fill: #e0452c;
+}
+
+@keyframes spinner_svv2 {
+  100% { transform: rotate(360deg) }
+}
+
+.spin {
+  animation: spin 5s linear infinite, opacity 1s linear infinite;
+}
+
+@keyframes opacity {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

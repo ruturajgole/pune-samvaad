@@ -8,6 +8,10 @@
       "esnext"
     ],
     "noImplicitAny": true,
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["*"]
+    },
     "noImplicitThis": true,
     "strictNullChecks": true,
     "allowJs": true,

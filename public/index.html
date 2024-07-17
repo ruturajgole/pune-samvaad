@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <style>
       html, body {
-        font-family: circular;
         box-sizing: border-box;
         margin: 0;
         padding: 0;
         max-width: 100%;
+      }
+      * {
+        font-family: "Open Sans", sans-serif;
       }
       div {
         box-sizing: border-box;
@@ -18,6 +23,15 @@
       button:hover {
         opacity: 0.5;
       }
+      .fade-enter {
+        opacity: 0;
+      }
+
+      .fade-enter-active {
+        opacity: 1;
+        transition: opacity 500ms;
+      }
+
     </style>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />

@@ -1,61 +1,91 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import {
   About,
-  Events,
-  Gallery,
+  EventsView,
+  GalleryView,
   Homepage,
   Suggestions
-} from "./pages";
+} from "view/pages";
 
 import {
   Header,
+  Loader,
   Modal,
   ModalProps,
-  UnderConstruction,
-} from "./components";
+  Error,
+  animate,
+} from "view/lib";
 import { getData } from './services/api';
-import { Page } from './services/models';
+import { Events, Gallery, Page, Pages } from './services/models';
 
 
 const App: React.FC = () => {
   const [data, setData] = useState<Record<string, any>>({});
-  const [page, setPage] = useState<Page>(Page.Homepage);
+  const [currentPage, setPage] = useState<Page>({page: Pages.Homepage});
   const [modalProps, setModalProps] = useState<ModalProps | null>(null);
 
   useEffect(() => {
-    getData().then((data) => setData(data));
+    getData()
+    .then((data) => setData(data))
+    .catch((error) => {
+      console.log(error, "ERROR");
+      setPage(page => ({page: Pages.Error}));
+      setData(data => ({error}));
+    });
   }, []);
 
+  const { page, subPage } = currentPage;
+  
+  const pages = useMemo(() =>
+    <div className={"App"}>
+      <Suspense fallback={<Loader />}>
+      {data && 
+      ((page === Pages.Homepage &&
+        animate(<Homepage data={data} setModalProps={setModalProps} />)) ||
+      (page === Pages.Events &&
+        animate(<EventsView
+            events={data.Events}
+            page={(subPage as Events)}/>)) ||
+      (page === Pages.About &&
+        animate(<About text={data.AboutUs}/>)) ||
+      (page === Pages.Gallery &&
+        animate(<GalleryView
+          setSubPage={setPage}
+          page={(subPage as Gallery)} />)) || 
+      (page === Pages.Suggestions &&
+        animate(<Suggestions text={data.Suggestions}/>)) ||
+      (page === Pages.Error &&
+        animate(<Error error={data.error}/>)))}
+    </Suspense>
+  </div>, [data, currentPage]
+  );
+
   return (
-      <div>
-        <Header currentPage={page} setPage={setPage}/>
-        <div style={styles(true)}>
-          {page === Page.Homepage &&
-            (!!data && <Homepage setModalProps={setModalProps} events={data.Events} testimonials={data.Testimonials} />)}
-          {page === Page.Events &&
-            <Events events={data.Events}/>}
-          {page === Page.About &&
-            <About text={data.AboutUs}/>}
-          {page === Page.Gallery &&
-            <Gallery />}
-          {page === Page.Suggestions &&
-            <Suggestions text={data.Suggestions}/>}
-          {page === Page.UnderConstruction &&
-            <UnderConstruction />}
-        </div>
-        {modalProps && 
-          <Modal 
-            onClose={modalProps.onClose}
-            title={modalProps.title} 
-            children={modalProps.children} />}
-      </div>
+    <div>
+      <Header currentPage={currentPage} setPage={setPage}/>
+      {pages}
+      {modalProps && 
+        <Modal 
+          onClose={modalProps.onClose}
+          title={modalProps.title} 
+          children={modalProps.children} />}
+      <div style={styles.corner}></div>
+    </div>
   );
 };
 
-const styles = (isMobile: boolean): Record<string, React.CSSProperties> => ({
-  page: {
-    display: isMobile ? "flex" : "none"
+const styles = {
+  corner: {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    height: "100px", /* Adjust the height as needed */
+    background: `url('${process.env.PUBLIC_URL}/corner-left.png') no-repeat left bottom, url('${process.env.PUBLIC_URL}/corner-right.png') no-repeat right bottom`,
+    backgroundSize: "contain",
+    pointerEvents: "none", /* Ensure it doesn't block other elements */
+    zIndex: -1
   }
-});
+} as Record<string, React.CSSProperties>;
  
 export default App;
