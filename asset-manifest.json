@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/pune-samvaad/static/css/main.3b208536.css",
-    "main.js": "/pune-samvaad/static/js/main.8dea262f.js",
-    "static/js/646.19c684eb.chunk.js": "/pune-samvaad/static/js/646.19c684eb.chunk.js",
-    "static/js/20.e6fb344b.chunk.js": "/pune-samvaad/static/js/20.e6fb344b.chunk.js",
+    "main.js": "/pune-samvaad/static/js/main.699babfe.js",
+    "static/js/589.aba6ba02.chunk.js": "/pune-samvaad/static/js/589.aba6ba02.chunk.js",
+    "static/js/727.09a59eeb.chunk.js": "/pune-samvaad/static/js/727.09a59eeb.chunk.js",
     "index.html": "/pune-samvaad/index.html",
     "main.3b208536.css.map": "/pune-samvaad/static/css/main.3b208536.css.map",
-    "main.8dea262f.js.map": "/pune-samvaad/static/js/main.8dea262f.js.map",
-    "646.19c684eb.chunk.js.map": "/pune-samvaad/static/js/646.19c684eb.chunk.js.map",
-    "20.e6fb344b.chunk.js.map": "/pune-samvaad/static/js/20.e6fb344b.chunk.js.map"
+    "main.699babfe.js.map": "/pune-samvaad/static/js/main.699babfe.js.map",
+    "589.aba6ba02.chunk.js.map": "/pune-samvaad/static/js/589.aba6ba02.chunk.js.map",
+    "727.09a59eeb.chunk.js.map": "/pune-samvaad/static/js/727.09a59eeb.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3b208536.css",
-    "static/js/main.8dea262f.js"
+    "static/js/main.699babfe.js"
   ]
 }
