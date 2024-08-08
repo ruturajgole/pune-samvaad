@@ -1,60 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import { ArrowLeft, ArrowRight } from '@mui/icons-material';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { Div, Text } from '../components';
 
 interface CarouselProps {
   children: ReadonlyArray<React.ReactNode>;
   childrenStyles?: React.CSSProperties;
   interval: number;
+  title?: string;
 }
-export const Carousel = ({ children, childrenStyles, interval = 3000 }: CarouselProps) => {
+export const Carousel = ({ title, children, childrenStyles, interval = 3000 }: CarouselProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const slideInterval = setInterval(() => {
+  const startSlideInterval = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % children.length);
     }, interval);
+  }, [children.length, interval]);
 
-    return () => clearInterval(slideInterval);
-  }, [interval, children.length]);
+  useEffect(() => {
+    startSlideInterval();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [startSlideInterval]);
+
+  const handleSlideChange = (index: number) => {
+    if(index < 0) {index = children.length - 1;}
+    if(index >= children.length) {index = 0;}
+    setCurrentSlide(index);
+    startSlideInterval(); // Clear and reset interval when slide changes
+  };
 
   return (
-    <div style={styles.carousel}>
-      {children.map((child: React.ReactNode, index: number) => (
-        <div
-          style={{...styles.carouselSlide,
-            ...(index === currentSlide && {...styles.carouselSlideActive}),
-            ...childrenStyles
-          }}
-          key={index}>
-        {child}
-      </div>
-      ))}
-    </div>
+    <Div>
+      {title && <Text style={styles.title}>{title}</Text>}
+      <Div style={styles.carouselContainer}>
+        {children.map((child: React.ReactNode, index: number) => (
+          <Div
+            style={{...styles.carouselSlide,
+              ...(index === currentSlide && {...styles.carouselSlideActive}),
+              ...childrenStyles
+            }}
+            key={index}>
+          <ArrowLeft onClick={() => handleSlideChange(index - 1)} style={styles.arrow}/>
+          {child}
+          <ArrowRight onClick={() => handleSlideChange(index + 1)} style={styles.arrow}/>
+        </Div>
+        ))}
+      </Div>
+    </Div>
   );
 };
 
 const styles = {
   carouselSlide: {
-    position: "fixed",
-    width: "100%",
-    height: "35vh",
+    gridArea: "stack",
+    justifyContent: "center",
+    alignItems: "center",
     opacity: 0,
     transition: "opacity 1s ease-in-out",
     display: "flex", 
-    justifyContent: "space-between", 
-    flexDirection: "row", 
-    padding: "2%",
-    background: `
-    linear-gradient(to right, #e0452c, 95%, white),
-    linear-gradient(to top, #e0452c, 95%, white),
-    linear-gradient(to bottom, #e0452c, 95%, white)`,
-    backgroundBlendMode: "screen",
-    color: "black",
     pointerEvents: "none"
   },
   carouselSlideActive: {
     opacity: 1,
     pointerEvents: "all"
+  },
+  carouselContainer: {
+    display: "grid",
+    position: "relative",
+    gridTemplateAreas: "stack"
+  },
+  title: {
+    textAlign: "center",
+    color: "#581541",
+    fontWeight: "bold"
+  },
+  arrow: {
+    transform: "scale(3)",
+    cursor: "pointer"
   }
-} as Record<string, React.CSSProperties>;
+} as const;
 
 export default Carousel;

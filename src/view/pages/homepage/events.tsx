@@ -1,7 +1,7 @@
 import React from "react";
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { ModalProps } from "view/lib"; 
 import { Event } from "services/models";
+import { Div, Image, Text } from "view/lib/components";
 
 export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props: ModalProps | null) => void) =>
   events.filter(event => event).map((event) => {
@@ -13,38 +13,15 @@ export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props:
   ];
 
   return <React.Fragment key={event.Title}>
-    <div style={styles.slide}>
-      <span style={styles.title}>{event.Title}</span>
-      <span style={styles.guest}>{event.Guest}</span>
-      <span style={styles.date}>{`${day+getOrdinalSuffix(day)} ${months[month]} ${year}`}</span>
-    </div>
-    <div style={styles.status}>
-      {!!event.Video
-        ? watchNow(() => setModalProps({
-          title: event.Title,
-          onClose: () => setModalProps(null),
-          children: Youtube(event.Video!)
-        }))
-        : "UPCOMING"}
-    </div>
+    <Div style={styles.container}>
+      <Div style={styles.imageContainer}>
+        <Image style={styles.image} src={`${process.env.PUBLIC_URL}/event.jpg`} />
+      </Div>
+      <Text style={styles.text}>{event.Guest}</Text>
+      <Text style={styles.text}>{event.Date}</Text>
+    </Div>
   </React.Fragment>
 });
-
-const watchNow = (setModalProps: () => void) =>
-  <button
-    onClick={setModalProps}
-    style={styles.watchNow}>
-    <PlayCircleIcon fontSize={"large"} />
-    Watch Now
-  </button> 
-
-const Youtube = (link: string) => 
-  <iframe
-    width="50%"
-    height="50%"
-    src={link}
-    title="YouTube video player"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" />  
 
 const getOrdinalSuffix = (date: number) => {
   if (date > 3 && date < 21) return 'th';
@@ -57,38 +34,25 @@ const getOrdinalSuffix = (date: number) => {
 }
 
 const styles = {
-  title: {
-    fontSize: "xxx-large",
-  },
-  guest: {
-    fontSize: "xx-large",
-  },
-  date: {
-    fontSize: "x-large",  
-  },
-  slide: {
+  container: {
     display: "flex",
     flexDirection: "column",
-    justifySelf: "end",
-    alignSelf: "end"
-  },
-  status: {
-    display: "flex",
-    flexDirection: "column",
-    justifySelf: "end",
-    alignSelf: "end",
-    fontSize: "x-large",
-    zIndex: 20,
-  },
-  watchNow: {
-    display: "flex",
-    fontSize: "large",
-    justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: "10%",
-    backgroundColor: "#e0452c",
-    color: "white",
-    borderColor: "white",
-    cursor: "pointer",
+    backgroundColor: "white",
+    padding: "2%",
+    width: ["70%", "70%", "40%"],
+    height: "max-content"
+  },
+  imageContainer: {
+    padding: "5%"
+  },
+  image: {
+    aspectRatio: "1/1",
+    width: "100%",
+    borderRadius: "100%",
+    objectFit: "cover"
+  },
+  text: {
+    textAlign: "center"
   }
-} as Record<string, React.CSSProperties>;
+} as const;
