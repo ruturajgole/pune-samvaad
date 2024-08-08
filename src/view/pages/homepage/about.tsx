@@ -20,7 +20,8 @@ const styles = {
     flex: "0.25",
     backgroundColor: "#631046",
     justifyContent: "space-evenly",
-    padding: "2%"
+    padding: "2%",
+    gap: "1%"
   },
   imageContainer: {
     display: "flex",
@@ -28,7 +29,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    width: "20%",
+    width: ["50%", "50%", "20%"],
     backgroundColor: "white"
   },
   textContainer: {
@@ -44,6 +45,6 @@ const styles = {
     justifySelf: "end",
     textAlign: "end"
   }
-}
+} as const;
 
 export default About;
