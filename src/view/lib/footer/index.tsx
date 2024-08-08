@@ -1,7 +1,12 @@
 import { Div, Text } from "../components";
-import {Instagram, Twitter, Facebook} from '@mui/icons-material/';
+import {Instagram, Twitter, Facebook, YouTube} from '@mui/icons-material/';
 
 const contacts = [
+  {
+    link: "https://www.youtube.com/@PuneSamvad1",
+    icon: <YouTube fontSize="large" color={"error"}/>,
+    text: "Subscribe To Our YouTube Channel"
+  },
   {
     link: "https://www.instagram.com/punesamvad1",
     icon: <Instagram fontSize={"large"}/>,
