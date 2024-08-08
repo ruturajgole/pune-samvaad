@@ -17,11 +17,11 @@ export const Photos = ({folders}: Props) => {
     <span style={styles.title}>Photos</span>
     {
       !!folders.length && folders.map((folder, folderIndex) =>
-      <div style={styles.folder}>
+      <div key={folder.name} style={styles.folder}>
         <span style={styles.folderTitle}>{folder.name}</span>
         <div style={styles.grid}>
           {folder.photos.map((photo, photoIndex) =>
-          <img onClick={() => setImage({folderIndex, photoIndex})} style={styles.thumbnail} src={photo.thumbnailLink} alt={photo.name}/>)}
+          <img loading={"lazy"} key={photo.id} onClick={() => setImage({folderIndex, photoIndex})} style={styles.thumbnail} src={photo.thumbnailLink} alt={photo.name}/>)}
         </div>
         <hr style={styles.horizontalLine}/>
       </div>
