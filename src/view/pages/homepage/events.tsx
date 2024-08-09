@@ -1,6 +1,6 @@
 import React from "react";
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import { ModalProps } from "view/lib"; 
+import { ModalProps, RegistrationForm } from "view/lib"; 
 import { Event } from "services/models";
 import { Button, Div, Text } from "view/lib/components";
 
@@ -19,6 +19,13 @@ export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props:
       <Text style={styles.guest}>{event.Guest}</Text>
       <Text style={styles.date}>{`${day+getOrdinalSuffix(day)} ${months[month]} ${year}`}</Text>
     </Div>
+    <Button onClick={() => setModalProps({
+      title: "Registration Form",
+      onClose: () => setModalProps(null),
+      children: <RegistrationForm event={event}/>
+    })}>
+      REGISTER
+    </Button>
     <Div style={styles.status}>
       {!!event.Video
         ? watchNow(() => setModalProps({

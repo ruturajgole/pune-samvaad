@@ -4,6 +4,15 @@ import { Carousel } from "./carousel";
 import { Header } from "./header";
 import { Loader } from "./loader";
 import animate from "./animated";
+import RegistrationForm from './form';
 
-export { animate, Carousel, Header, Modal, Loader, Error };
+export {
+  animate,
+  Carousel,
+  Header,
+  Modal,
+  Loader,
+  RegistrationForm,
+  Error
+};
 export type { ModalProps };
