@@ -6,10 +6,11 @@ interface Props {
   readonly style?: SxProps;
   readonly ref?: React.Ref<HTMLDivElement>;
   readonly id?: string;
+  readonly className?: string;
 }
 
-const Div = ({ children, id, ref, style }: Props) =>
-  <Box id={id} ref={ref} sx={style}>
+const Div = ({ children, className, id, ref, style }: Props) =>
+  <Box className={className} id={id} ref={ref} sx={style}>
     {children}
   </Box>
 

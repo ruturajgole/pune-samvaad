@@ -1,8 +1,9 @@
 import { Testimonial } from "services/models";
+import { Div } from "view/lib/components";
 
 export const testimonialSlides = (testimonials: ReadonlyArray<Testimonial>) => 
   testimonials.map((testimonial) =>
-    <div key={testimonial.Author} className="slider">
+    <Div key={testimonial.Author} className="slider">
       "{testimonial.Text}"<br/>
       -{testimonial.Author}
-    </div>);
+    </Div>);

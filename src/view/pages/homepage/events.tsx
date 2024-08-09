@@ -2,6 +2,7 @@ import React from "react";
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { ModalProps } from "view/lib"; 
 import { Event } from "services/models";
+import { Button, Div, Text } from "view/lib/components";
 
 export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props: ModalProps | null) => void) =>
   events.filter(event => event).map((event) => {
@@ -13,12 +14,12 @@ export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props:
   ];
 
   return <React.Fragment key={event.Title}>
-    <div style={styles.slide}>
-      <span style={styles.title}>{event.Title}</span>
-      <span style={styles.guest}>{event.Guest}</span>
-      <span style={styles.date}>{`${day+getOrdinalSuffix(day)} ${months[month]} ${year}`}</span>
-    </div>
-    <div style={styles.status}>
+    <Div style={styles.slide}>
+      <Text style={styles.title}>{event.Title}</Text>
+      <Text style={styles.guest}>{event.Guest}</Text>
+      <Text style={styles.date}>{`${day+getOrdinalSuffix(day)} ${months[month]} ${year}`}</Text>
+    </Div>
+    <Div style={styles.status}>
       {!!event.Video
         ? watchNow(() => setModalProps({
           title: event.Title,
@@ -26,17 +27,17 @@ export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props:
           children: Youtube(event.Video!)
         }))
         : "UPCOMING"}
-    </div>
+    </Div>
   </React.Fragment>
 });
 
 const watchNow = (setModalProps: () => void) =>
-  <button
+  <Button
     onClick={setModalProps}
     style={styles.watchNow}>
     <PlayCircleIcon fontSize={"large"} />
     Watch Now
-  </button> 
+  </Button>
 
 const Youtube = (link: string) => 
   <iframe
@@ -58,13 +59,13 @@ const getOrdinalSuffix = (date: number) => {
 
 const styles = {
   title: {
-    fontSize: "xxx-large",
+    fontSize: ["x-large", "x-large", "xxx-large"],
   },
   guest: {
-    fontSize: "xx-large",
+    fontSize: ["large", "large", "xx-large"],
   },
   date: {
-    fontSize: "x-large",  
+    fontSize: ["medium", "medium","x-large"],  
   },
   slide: {
     display: "flex",
@@ -82,7 +83,7 @@ const styles = {
   },
   watchNow: {
     display: "flex",
-    fontSize: "large",
+    fontSize: ["medium", "medium", "large"],
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: "10%",
@@ -91,4 +92,4 @@ const styles = {
     borderColor: "white",
     cursor: "pointer",
   }
-} as Record<string, React.CSSProperties>;
+} as const;

@@ -3,9 +3,6 @@ import { Carousel, ModalProps } from "view/lib";
 // import { Event, Testimonial } from "services/models";
 import { eventSlides } from "./events";
 import { testimonialSlides } from "./testimonials";
-import About from "./about";
-import Contact from "./contact";
-
 
 interface Props {
   data: Record<string, any>;
@@ -21,26 +18,24 @@ const Homepage: React.FC<Props> = ({data, setModalProps}: Props) =>
       children={testimonialSlides(data.Testimonials || [])}
       interval={5000}
       childrenStyles={styles.testimonials}/>
-    {/* <About about={data.AboutUs} />
-    <Contact /> */}
   </div>;
 
 const styles = {
   container: {
     display: "flex",
     flexDirection: "column",
-    height: "100vh"
+    height: "80vh"
   },
   testimonials: {
-    top: "60%",
+    top: ["60%"],
     textAlign: "center",
     display: "flex",
     background: "none", 
     justifyContent: "center",
     alignItems: "center",
-    height: "35vh",
-    fontSize: "xx-large"
+    height: ["30vh", "30vh", "35vh"],
+    fontSize: ["large", "large", "xx-large"]
   }
-} as Record<string, React.CSSProperties>;
+} as const;
 
 export default Homepage;

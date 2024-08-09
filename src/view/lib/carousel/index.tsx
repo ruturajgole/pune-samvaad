@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Div } from '../components';
+import { SxProps } from '@mui/material';
 
 interface CarouselProps {
   children: ReadonlyArray<React.ReactNode>;
-  childrenStyles?: React.CSSProperties;
+  childrenStyles?: React.CSSProperties | SxProps;
   interval: number;
 }
 export const Carousel = ({ children, childrenStyles, interval = 3000 }: CarouselProps) => {
@@ -17,18 +19,18 @@ export const Carousel = ({ children, childrenStyles, interval = 3000 }: Carousel
   }, [interval, children.length]);
 
   return (
-    <div style={styles.carousel}>
+    <Div>
       {children.map((child: React.ReactNode, index: number) => (
-        <div
+        <Div
           style={{...styles.carouselSlide,
             ...(index === currentSlide && {...styles.carouselSlideActive}),
             ...childrenStyles
           }}
           key={index}>
         {child}
-      </div>
+      </Div>
       ))}
-    </div>
+    </Div>
   );
 };
 
@@ -36,7 +38,7 @@ const styles = {
   carouselSlide: {
     position: "fixed",
     width: "100%",
-    height: "35vh",
+    height: ["30vh", "30vh", "40vh"],
     opacity: 0,
     transition: "opacity 1s ease-in-out",
     display: "flex", 
@@ -55,6 +57,6 @@ const styles = {
     opacity: 1,
     pointerEvents: "all"
   }
-} as Record<string, React.CSSProperties>;
+} as const;
 
 export default Carousel;
