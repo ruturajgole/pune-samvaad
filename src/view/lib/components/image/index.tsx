@@ -6,8 +6,9 @@ interface Props {
   readonly onClick?: () => void;
 }
 
-const Image = ({ src, style }: Props) =>
+const Image = ({ src, onClick, style }: Props) =>
   <Box
+    onClick={onClick}
     component="img"
     src={src}
     sx={style} />

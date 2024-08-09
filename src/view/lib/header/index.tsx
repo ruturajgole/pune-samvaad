@@ -1,9 +1,14 @@
 import { Events, Gallery, Navigation, Page, Pages } from "services/models";
 import { NavigationBar } from "./navigation-bar";
-import { Collections, ContactPage, Event, Info } from '@mui/icons-material';
+import { Collections, ContactPage, Event, Home, Info } from '@mui/icons-material';
 import { HeaderMobile, Image } from "../components";
 
 const navigation: ReadonlyArray<Navigation> = [
+  {
+    icon: <Home />,
+    title: "HOME",
+    page: Pages.Homepage,
+  },
   {
     icon: <Info />,
     title: "ABOUT US",
