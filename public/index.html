@@ -11,7 +11,7 @@
         padding: 0;
         max-width: 100%;
       }
-      * {
+      *, span, p, button, div {
         font-family: "Open Sans", sans-serif;
       }
       div {
@@ -31,7 +31,11 @@
         opacity: 1;
         transition: opacity 500ms;
       }
-
+      #root {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
     </style>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />

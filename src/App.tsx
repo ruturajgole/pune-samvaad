@@ -8,6 +8,7 @@ import {
 } from "view/pages";
 
 import {
+  Footer, 
   Header,
   Loader,
   Modal,
@@ -17,7 +18,7 @@ import {
 } from "view/lib";
 import { getData } from './services/api';
 import { Events, Gallery, Page, Pages } from './services/models';
-
+import { Div } from 'view/lib/components';
 
 const App: React.FC = () => {
   const [data, setData] = useState<Record<string, any>>({});
@@ -28,7 +29,6 @@ const App: React.FC = () => {
     getData()
     .then((data) => setData(data))
     .catch((error) => {
-      console.log(error, "ERROR");
       setPage(page => ({page: Pages.Error}));
       setData(data => ({error}));
     });
@@ -37,7 +37,7 @@ const App: React.FC = () => {
   const { page, subPage } = currentPage;
   
   const pages = useMemo(() =>
-    <div className={"App"}>
+    <Div style={styles.page}>
       <Suspense fallback={<Loader />}>
       {data && 
       ((page === Pages.Homepage &&
@@ -57,24 +57,32 @@ const App: React.FC = () => {
       (page === Pages.Error &&
         animate(<Error error={data.error}/>)))}
     </Suspense>
-  </div>, [data, currentPage]
+  </Div>, [data, currentPage]
   );
 
   return (
-    <div>
+    <Div style={styles.container}>
       <Header currentPage={currentPage} setPage={setPage}/>
       {pages}
+      <Footer />
       {modalProps && 
         <Modal 
           onClose={modalProps.onClose}
           title={modalProps.title} 
           children={modalProps.children} />}
-    </div>
+    </Div>
   );
 };
 
 const styles = {
-
+  container: {
+    flex: 1
+  },
+  page: {
+    height: ["75vh", "75vh", "70vh"],
+    overflowY: "auto",
+    overflowX: "hidden"
+  }
 } as const;
  
 export default App;
