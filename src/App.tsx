@@ -69,23 +69,12 @@ const App: React.FC = () => {
           onClose={modalProps.onClose}
           title={modalProps.title} 
           children={modalProps.children} />}
-      <div style={styles.corner}></div>
     </div>
   );
 };
 
 const styles = {
-  corner: {
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    height: "100px", /* Adjust the height as needed */
-    background: `url('${process.env.PUBLIC_URL}/corner-left.png') no-repeat left bottom, url('${process.env.PUBLIC_URL}/corner-right.png') no-repeat right bottom`,
-    backgroundSize: "contain",
-    pointerEvents: "none", /* Ensure it doesn't block other elements */
-    zIndex: -1
-  }
-} as Record<string, React.CSSProperties>;
+
+} as const;
  
 export default App;
