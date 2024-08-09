@@ -36,7 +36,11 @@ export const Photos = ({folders}: Props) => {
             setImage({folderIndex, photoIndex: photoIndex - 1})
           }}
           style={{...styles.arrow, visibility: photoIndex > 0 ? "visible" : "hidden"}} />
-          <iframe src={`https://drive.google.com/file/d/${folders[folderIndex].photos[photoIndex].id}/preview`} width={"70%"} height={"90%"}/>
+          <iframe
+            style={{pointerEvents: "none"}}
+            src={`https://drive.google.com/file/d/${folders[folderIndex].photos[photoIndex].id}/preview`}
+            width={"70%"}
+            height={"90%"} />
           <ArrowCircleRight onClick={(e) => {
             e.stopPropagation();
             setImage({folderIndex, photoIndex: photoIndex + 1})

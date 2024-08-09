@@ -3,6 +3,7 @@ import { Folder, Gallery, Page, Pages } from "services/models";
 import { Photos } from "./photos";
 import { Loader } from "view/lib";
 import { Videos } from "./videos";
+import { getMedia } from "services/api";
 
 interface Props {
   readonly page?: Gallery;
@@ -20,15 +21,17 @@ const GalleryView = ({ page, setSubPage }: Props) => {
   const [hover, setHover] = useState<Hover>(Hover.None);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_PATH}/photos`)
-    .then((data) => data.json()
-    .then((res) => setFolders(res.filter((folder: Folder) => folder.photos.length))));
+    getMedia()
+    .then((data) => setFolders(data))
+    .catch((error) => {
+      console.log(error, "ERROR");
+    });
   }, []);
 
   const photos = folders.map((folder) => folder.photos).flat();
   const videos = folders.map((folder) => folder.videos).flat();
 
-  return  (folders.length  
+  return  (!!folders.length  
     ? (page === Gallery.Photos && (<Photos folders={folders}/>)) ||
       (page === Gallery.Videos && (<Videos folders={folders}/>)) ||
       (<div style={styles.container}>
@@ -43,7 +46,7 @@ const GalleryView = ({ page, setSubPage }: Props) => {
               See More
             </div>}
             {photos.map((photo) =>
-              <img key={photo.name} style={styles.thumbnail} src={photo.thumbnailLink} alt={photo.name} />
+              <img key={photo.id} style={styles.thumbnail} src={photo.thumbnailLink} alt={photo.name} />
             )}
           </div>}
           <span style={styles.title}>Videos</span>
@@ -57,7 +60,7 @@ const GalleryView = ({ page, setSubPage }: Props) => {
               See More
             </div>}
             {videos.map((video) =>
-              <img key={video.name} style={styles.thumbnail} src={video.thumbnailLink} alt={video.name} />
+              <img key={video.id} style={styles.thumbnail} src={video.thumbnailLink} alt={video.name} />
             )}
           </div>}
         </div>)
