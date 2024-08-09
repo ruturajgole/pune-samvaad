@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const animate = (component: React.ReactNode) => {
   const WithEnterAnimation: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
 
-    // Toggle isVisible to trigger animation
-    setTimeout(() => setIsVisible(true), 250);
+    useEffect(() => {
+      const timeout = setTimeout(() => setIsVisible(true), 250);
+
+      return () => clearTimeout(timeout);
+    }, []);
 
     return (
       <div className={`fade${isVisible ? '-enter-active' : '-enter'}`}>{component}</div>
