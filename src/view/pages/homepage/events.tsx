@@ -1,7 +1,7 @@
 import React from "react";
 import { ModalProps } from "view/lib"; 
 import { Event } from "services/models";
-import { Div, Image, Text } from "view/lib/components";
+import { Button, Div, Image, Text } from "view/lib/components";
 
 export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props: ModalProps | null) => void) =>
   events.filter(event => event).map((event) => {
@@ -19,9 +19,20 @@ export const eventSlides = (events: ReadonlyArray<Event>, setModalProps: (props:
       </Div>
       <Text style={styles.text}>{event.Guest}</Text>
       <Text style={styles.text}>{event.Date}</Text>
+      {isUpcoming(event.Date) && <Button onClick={() => {}}>REGISTER</Button>}
     </Div>
   </React.Fragment>
 });
+
+const isUpcoming = (dateString: string) => {
+  const [day, month, year] = dateString.split("/").map(Number);
+  const date: Date = new Date(year, month - 1, day);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return date >= today;
+}
 
 const getOrdinalSuffix = (date: number) => {
   if (date > 3 && date < 21) return 'th';
@@ -40,7 +51,7 @@ const styles = {
     alignItems: "center",
     backgroundColor: "white",
     padding: "2%",
-    width: ["70%", "70%", "40%"],
+    width: "max-content",
     height: "max-content"
   },
   imageContainer: {

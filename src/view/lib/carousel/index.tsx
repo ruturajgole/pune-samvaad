@@ -49,9 +49,9 @@ export const Carousel = ({ title, children, childrenStyles, interval = 3000 }: C
               ...childrenStyles
             }}
             key={index}>
-          <ArrowLeft onClick={() => handleSlideChange(index - 1)} style={styles.arrow}/>
+          {children.length > 1 && <ArrowLeft onClick={() => handleSlideChange(index - 1)} style={styles.arrow}/>}
           {child}
-          <ArrowRight onClick={() => handleSlideChange(index + 1)} style={styles.arrow}/>
+          {children.length > 1 && <ArrowRight onClick={() => handleSlideChange(index + 1)} style={styles.arrow}/>}
         </Div>
         ))}
       </Div>

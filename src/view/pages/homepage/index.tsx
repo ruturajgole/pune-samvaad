@@ -6,6 +6,7 @@ import { testimonialSlides } from "./testimonials";
 import About from "./about";
 import Contact from "./contact";
 import { Div, Text } from "view/lib/components";
+import { Event } from "services/models";
 
 interface Props {
   data: Record<string, any>;
@@ -23,16 +24,26 @@ const Homepage: React.FC<Props> = ({data, setModalProps}: Props) =>
     <Div style={styles.eventsContainer}>
       <Carousel
         title={"PAST EVENTS"}
-        children={eventSlides(data.Events || [], setModalProps)}
+        children={eventSlides((data.Events && (data.Events.filter((event: Event) => !isUpcoming(event.Date)))) || [], setModalProps)}
         interval={5000} />
       <Carousel
         title={"UPCOMING EVENTS"}
-        children={eventSlides(data.Events || [], setModalProps)}
+        children={eventSlides((data.Events && (data.Events.filter((event: Event) => isUpcoming(event.Date)))) || [], setModalProps)}
         interval={5000} />
     </Div>
     <About about={data.AboutUs} />
     <Contact />
   </Div>;
+
+const isUpcoming = (dateString: string) => {
+  const [day, month, year] = dateString.split("/").map(Number);
+  const date: Date = new Date(year, month - 1, day);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return date >= today;
+}
 
 const styles = {
   container: {
