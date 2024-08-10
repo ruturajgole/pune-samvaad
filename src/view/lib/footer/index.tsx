@@ -28,7 +28,7 @@ const Footer = () =>
   <Div style={styles.container}>
     <Text style={styles.title}>Connect With Us!</Text>
     {contacts.map((contact) =>
-      <a href={contact.link} target="_blank" rel={"noreferrer"}>
+      <a key={contact.text} href={contact.link} target="_blank" rel={"noreferrer"}>
         {contact.icon}
       </a>
     )}
