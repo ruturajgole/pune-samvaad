@@ -8,6 +8,7 @@ import Contact from "./contact";
 import { Div, Text } from "view/lib/components";
 import { Event } from "services/models";
 import { getPhoto } from "services/api";
+import { useMediaQuery } from "@mui/material";
 
 interface Props {
   data: Record<string, any>;
@@ -16,6 +17,7 @@ interface Props {
 
 const Homepage: React.FC<Props> = ({data, setModalProps}: Props) => {
   const [updatedEvents, setUpdatedEvents] = useState(data.Events || []);  
+  const isSmallDevice = useMediaQuery("(max-width: 1024px)");
 
   useEffect(() => {
     const fetchPhoto = async (event: Event): Promise<Event> => {
@@ -50,19 +52,27 @@ const Homepage: React.FC<Props> = ({data, setModalProps}: Props) => {
   
   return <Div style={styles.container}>
     <Div style={styles.testimonialsContainer}>
-      <Carousel
-        children={testimonialSlides(data.Testimonials || [])}
-        interval={5000} />
+    <Carousel
+      children={testimonialSlides(data.Testimonials || [])}
+      interval={5000} />
     </Div>
     <Text style={styles.eventsTitle}>Explore Bharat with Pune Samvad</Text>
     <Div style={styles.eventsContainer}>
       <Carousel
         title={"PAST EVENTS"}
-        children={eventSlides((updatedEvents && (updatedEvents.filter((event: Event) => !isUpcoming(event.Date)))) || [], setModalProps)}
+        children={eventSlides((
+          updatedEvents && (updatedEvents.filter((event: Event) => !isUpcoming(event.Date)))) || [],
+          isSmallDevice,
+          setModalProps
+        )}
         interval={5000} />
       <Carousel
         title={"UPCOMING EVENTS"}
-        children={eventSlides((updatedEvents && (updatedEvents.filter((event: Event) => isUpcoming(event.Date)))) || [], setModalProps)}
+        children={eventSlides((
+          updatedEvents && (updatedEvents.filter((event: Event) => isUpcoming(event.Date)))) || [],
+          isSmallDevice,
+          setModalProps
+        )}
         interval={5000} />
     </Div>
     <About about={data.AboutUs} />
