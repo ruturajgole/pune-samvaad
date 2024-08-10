@@ -35,6 +35,32 @@ export const getMedia = async () => {
   }
 }
 
+export const getPhoto = async (folderName: string) => {
+  try {
+    const host = getApiUrl();
+
+    const response = await fetch(
+      `${host}/photo`,
+      {
+        body: JSON.stringify({
+          folderName: folderName.replaceAll("'", "\\'")
+        }),
+        method: "post",
+        headers: new Headers({
+        "ngrok-skip-browser-warning": "69420",
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      })}
+    );
+
+    const data = await response.json();
+    
+    return data;
+  } catch (error) {
+    throw error
+  }
+}
+
 const getApiUrl = () => {
   if (process.env.REACT_APP_ENV === 'production') {
     return process.env.REACT_APP_API_URL_PRODUCTION;

@@ -4,4 +4,10 @@ export interface Event {
   Venue: string;
   Date: string;
   Video?: string;
+  photo?: Photo;
+}
+
+interface Photo {
+  readonly thumbnailLink: string;
+  readonly id: string;
 }
