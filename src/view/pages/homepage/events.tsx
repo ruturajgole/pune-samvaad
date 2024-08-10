@@ -1,5 +1,5 @@
 import React from "react";
-import { animate, ModalProps } from "view/lib"; 
+import { animate, ModalProps, RegistrationForm } from "view/lib"; 
 import { Event } from "services/models";
 import { Button, Div, Image, Text } from "view/lib/components";
 import { AccountCircle, PlayCircle } from "@mui/icons-material";
@@ -17,7 +17,14 @@ export const eventSlides = (events: ReadonlyArray<Event>, isSmallDevice: boolean
         <Text style={styles.text}>{event.Guest}</Text>
         <Text style={styles.text}>{event.Date}</Text>
         {isUpcoming(event.Date) 
-        ? <Button onClick={() => {}}>REGISTER</Button>
+        ? <Button onClick={() => setModalProps({
+            title: "Registration Form",
+            onClose: () => {console.log("HERE"); setModalProps(null);},
+            children: <RegistrationForm event={event}/>
+          })}>
+            REGISTER
+          </Button>
+    
         : watchNow(isSmallDevice
           ? () => event.Video && window.open(event.Video)
           : () => setModalProps({
@@ -28,6 +35,9 @@ export const eventSlides = (events: ReadonlyArray<Event>, isSmallDevice: boolean
       </Div>
     </React.Fragment>
   );
+
+
+
 const watchNow = (setModalProps: () => void) =>
   <Button
     onClick={setModalProps}
