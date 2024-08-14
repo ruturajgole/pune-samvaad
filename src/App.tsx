@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import {
   About,
-  EventsView,
+  Contact,
   GalleryView,
   Homepage,
   Suggestions
@@ -17,7 +17,7 @@ import {
   animate,
 } from "view/lib";
 import { getData } from './services/api';
-import { Events, Gallery, Page, Pages } from './services/models';
+import { Gallery, Page, Pages } from './services/models';
 import { Div } from 'view/lib/components';
 
 const App: React.FC = () => {
@@ -42,10 +42,6 @@ const App: React.FC = () => {
       {data && 
       ((page === Pages.Homepage &&
         animate(<Homepage data={data} setModalProps={setModalProps} />)) ||
-      (page === Pages.Events &&
-        animate(<EventsView
-            events={data.Events}
-            page={(subPage as Events)}/>)) ||
       (page === Pages.About &&
         animate(<About text={data.AboutUs}/>)) ||
       (page === Pages.Gallery &&
@@ -53,7 +49,9 @@ const App: React.FC = () => {
           setSubPage={setPage}
           page={(subPage as Gallery)} />)) || 
       (page === Pages.Suggestions &&
-        animate(<Suggestions text={data.Suggestions}/>)) ||
+        animate(<Suggestions text={data.Suggestions}/>)) || 
+      (page === Pages.Contact &&
+        animate(<Contact />)) ||
       (page === Pages.Error &&
         animate(<Error error={data.error}/>)))}
     </Suspense>

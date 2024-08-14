@@ -15,14 +15,6 @@ const navigation: ReadonlyArray<Navigation> = [
     page: Pages.About,
   },
   {
-    icon: <Event />,
-    title: "EVENTS",
-    page: Pages.Events,
-    subPages: [
-      { title: "UPCOMING EVENTS", page: Events.Upcoming }, { title: "PAST EVENTS", page: Events.Past }
-    ]
-  },
-  {
     icon: <Collections />,
     title: "GALLERY",
     page: Pages.Gallery,
