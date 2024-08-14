@@ -1,4 +1,4 @@
-import React from "react"
+import React, { BaseSyntheticEvent } from "react"
 import { Box, SxProps } from "@mui/material";
 
 interface Props {
@@ -7,10 +7,11 @@ interface Props {
   readonly ref?: React.Ref<HTMLDivElement>;
   readonly id?: string;
   readonly className?: string;
+  readonly onClick?: (e: BaseSyntheticEvent) => void;
 }
 
-const Div = ({ children, className, id, ref, style }: Props) =>
-  <Box className={className} id={id} ref={ref} sx={style}>
+const Div = ({ children, onClick, className, id, ref, style }: Props) =>
+  <Box onClick={onClick} className={className} id={id} ref={ref} sx={style}>
     {children}
   </Box>
 

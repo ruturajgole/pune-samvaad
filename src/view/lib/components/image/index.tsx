@@ -8,6 +8,8 @@ interface Props {
 
 const Image = ({ src, onClick, style }: Props) =>
   <Box
+    loading="lazy"
+    referrerPolicy="no-referrer"
     onClick={onClick}
     component="img"
     src={src}

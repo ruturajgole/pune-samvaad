@@ -5,9 +5,15 @@ export interface Event {
   Date: string;
   Video?: string;
   photo?: Photo;
+  Summary?: string;
+  banner?: string;
+  Time: string;
+  Map?: string;
 }
 
 interface Photo {
   readonly thumbnailLink: string;
+  readonly webViewLink: string;
+  readonly webContentLink: string;
   readonly id: string;
 }

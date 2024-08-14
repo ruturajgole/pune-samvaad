@@ -1,36 +1,38 @@
+import React from "react";
 import { Testimonial } from "services/models";
-import { Div, Image, Text } from "view/lib/components";
+import { Div, Text } from "view/lib/components";
 
-const text = `
-  The founders of the republic of India were very conscious that the republic they were creating was a modern manifestation of a very ancient civilization
-`;
-
-export const testimonialSlides = (testimonials: ReadonlyArray<Testimonial>) => 
-  [<Div style={styles.testimonialsContainer}>
-    <Image style={styles.testimonialImage} src={`${process.env.PUBLIC_URL}/testimony.jpg`} />
-    <Text style={styles.testimonialText}>"{text}"</Text>
-  </Div>];
+export const testimonialSlides = (
+  testimonials: ReadonlyArray<Testimonial>,
+) =>
+  testimonials.filter(testimonial => testimonial).map((testimonial, index) =>
+    <React.Fragment key={testimonial.Author + index}>
+      <Div style={styles.container}>
+        <Text style={styles.quote}>"{testimonial.Text}"</Text>
+        <Text style={styles.author}>-{testimonial.Author}</Text>
+      </Div>
+    </React.Fragment>
+  );
 
 const styles = {
-  testimonialsContainer: {  
+  container: {
     display: "flex",
-    backgroundColor: "#ef7f1b",
-    border: "5px solid #601145",
-    width: "90%",
-    aspectRatio: ["2", "2", "3"]
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    padding: "2%",
+    width: ["20vh", "20vh", "45vh"],
+    height: ["20vh", "20vh", "45vh"],
+    borderRadius: "2%",
+    border: "4px double #ef7e1b"
   },
-  testimonialImage: {
-    display: "flex",
-    flex: ["0.1", "0.3", "0.7"],
-    objectFit: "cover",
-    width: ["40%", "60%", "70%"],
+  quote: {
+    fontStyle: "italic",
+    fontSize: "x-large",
+    textAlign: "center"
   },
-  testimonialText: {
-    display: "flex",
-    flex: ["0.8", "0.7", "0.3"],
-    color: "white",
-    padding: "1%",
-    fontSize: ["small", "large", "x-large"],
-    fontStyle: "italic"
+  author: {
+    fontSize: "large"
   }
 } as const;

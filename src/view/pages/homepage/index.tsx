@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Carousel, ModalProps } from "view/lib";
-// import { Event, Testimonial } from "services/models";
 import { eventSlides } from "./events";
-import { testimonialSlides } from "./testimonials";
-import About from "./about";
-import Contact from "./contact";
 import { Div, Text } from "view/lib/components";
 import { Event } from "services/models";
-import { getPhoto } from "services/api";
+import { getBanner } from "services/api";
 import { useMediaQuery } from "@mui/material";
+import EventView from "../event";
+import { testimonialSlides } from "./testimonials";
+import { newsSlides } from "./news";
 
 interface Props {
   data: Record<string, any>;
@@ -17,24 +16,24 @@ interface Props {
 
 const Homepage: React.FC<Props> = ({data, setModalProps}: Props) => {
   const [updatedEvents, setUpdatedEvents] = useState(data.Events || []);  
+  const [currentEvent, setCurrentEvent] = useState<Event>();
   const isSmallDevice = useMediaQuery("(max-width: 1024px)");
 
   useEffect(() => {
     const fetchPhoto = async (event: Event): Promise<Event> => {
       try {
-          const data = await getPhoto(event.Title);
-          if(data && data.thumbnailLink) {return { ...event, photo: (data.thumbnailLink) };}
+          const data = await getBanner(event.Title);
+          if(data) {return { ...event, banner: data };}
           return event;
         } catch (error) {
         console.error(`Failed to fetch photo for event ${event.Title}`, error);
       }
-      return event; // Return original event if fetch fails
+      return event;
     };
 
     const fetchAllPhotos = async (events: ReadonlyArray<Event>) => {
       const promises = events.map((event: Event) => fetchPhoto(event));
 
-      // Using Promise.allSettled to handle each promise
       const results = await Promise.allSettled<Event>(promises);
 
       results.forEach(result => {
@@ -50,44 +49,24 @@ const Homepage: React.FC<Props> = ({data, setModalProps}: Props) => {
     data && data.Events && fetchAllPhotos(data.Events);
   }, [data]);
   
-  return <Div style={styles.container}>
+  return currentEvent
+  ? <EventView event={currentEvent} />
+  : (<Div style={styles.container}>
     <Div style={styles.testimonialsContainer}>
-    <Carousel
-      children={testimonialSlides(data.Testimonials || [])}
-      interval={5000} />
+      <Carousel
+        children={eventSlides(updatedEvents || [], isSmallDevice, setModalProps)}
+        interval={5000} />
     </Div>
     <Text style={styles.eventsTitle}>Explore Bharat with Pune Samvad</Text>
     <Div style={styles.eventsContainer}>
       <Carousel
-        title={"PAST EVENTS"}
-        children={eventSlides((
-          updatedEvents && (updatedEvents.filter((event: Event) => !isUpcoming(event.Date)))) || [],
-          isSmallDevice,
-          setModalProps
-        )}
+        children={newsSlides(Array(4).fill({name: "News"}))}
         interval={5000} />
       <Carousel
-        title={"UPCOMING EVENTS"}
-        children={eventSlides((
-          updatedEvents && (updatedEvents.filter((event: Event) => isUpcoming(event.Date)))) || [],
-          isSmallDevice,
-          setModalProps
-        )}
+        children={testimonialSlides(data.Testimonials || [])}
         interval={5000} />
     </Div>
-    <About about={data.AboutUs} />
-    <Contact />
-  </Div>;
-}
-
-const isUpcoming = (dateString: string) => {
-  const [day, month, year] = dateString.split("/").map(Number);
-  const date: Date = new Date(year, month - 1, day);
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  return date >= today;
+  </Div>);
 }
 
 const styles = {
@@ -96,7 +75,7 @@ const styles = {
     flexDirection: "column",
     height: "100vh",
     gap: "2%",
-    marginTop: "2%"
+    marginTop: "0.1%"
   },
   eventsTitle: {
     textAlign: "center",
@@ -104,14 +83,16 @@ const styles = {
   },
   eventsContainer: {
     display: "flex",
-    backgroundColor: "#c59fb8",
     height: "max-content",
     padding: "1%",
     justifyContent: "space-around",
     alignItems: "center"
   },
   testimonialsContainer: {
-    height: "max-content"
+    height: "max-content",
+    justifyContent: "center",
+    display: "flex",
+    width: "100%"
   }
 } as const;
 

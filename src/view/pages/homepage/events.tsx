@@ -1,42 +1,59 @@
-import React from "react";
-import { animate, ModalProps, RegistrationForm } from "view/lib"; 
 import { Event } from "services/models";
 import { Button, Div, Image, Text } from "view/lib/components";
-import { AccountCircle, PlayCircle } from "@mui/icons-material";
+import { PlayCircle } from "@mui/icons-material";
+import { Loader, ModalProps, RegistrationForm } from "view/lib";
 
-export const eventSlides = (events: ReadonlyArray<Event>, isSmallDevice: boolean, setModalProps: (props: ModalProps | null) => void) =>
-  events.filter(event => event).map((event) =>
-    <React.Fragment key={event.Title}>
-      <Div style={styles.container}>
-        <Div style={styles.imageContainer}>
-          {event.photo
-          ? animate(<Image style={styles.image} src={`${event.photo}`} />)
-          : <AccountCircle sx={styles.placeholderImage} />
-        }
-        </Div>
-        <Text style={styles.text}>{event.Guest}</Text>
-        <Text style={styles.text}>{event.Date}</Text>
-        {isUpcoming(event.Date) 
-        ? <Button onClick={() => setModalProps({
-            title: "Registration Form",
-            onClose: () => {console.log("HERE"); setModalProps(null);},
-            children: <RegistrationForm event={event}/>
-          })}>
-            REGISTER
-          </Button>
-    
-        : watchNow(isSmallDevice
-          ? () => event.Video && window.open(event.Video)
-          : () => setModalProps({
-          title: event.Title,
-          onClose: () => setModalProps(null),
-          children: Youtube(event.Video!)
-        }))}
+export const eventSlides = (
+  events: ReadonlyArray<Event>,
+  isSmallDevice: boolean,
+  setModalProps: (props: ModalProps | null) => void
+) => {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  return events.map((event) => {
+    const [day, month, year] = event.Date.split("/").map(Number);
+
+    const upcoming = isUpcoming(event.Date);
+
+    return <Div key={event.Title} style={styles.eventsContainer}>
+      {upcoming
+        ? <Text style={styles.upcoming}>{"UPCOMING"}</Text>
+        : <Text style={styles.past}>{"PAST EVENTS"}</Text>}
+      {event.banner
+        ? <Image style={styles.eventImage} src={`${event.banner}`} />
+        : <Div style={{...styles.eventImage, ...styles.loader}}><Loader /></Div>}
+      <Div style={styles.eventDetailsContainer}>
+        <Text style={styles.eventTitle}>{event.Title}</Text>
+        <Text>{event.Guest}</Text>
+        <Text>{`${day+getOrdinalSuffix(day)} ${months[month]} ${year}`}</Text>
+        {upcoming && event.Time && <Text>{event.Time}</Text>}
+        {upcoming && <Text>{event.Venue}</Text>}
+        <Text>{event.Summary}</Text>
+        {upcoming 
+          ? <Button
+              style={styles.registrationButton}
+              onClick={() => setModalProps({
+              title: "Registration Form",
+              onClose: () => setModalProps(null),
+              children: <RegistrationForm event={event} onClose={() => setModalProps(null)}/>
+            })}>
+              REGISTER
+            </Button>
+      
+          : watchNow(isSmallDevice
+            ? () => event.Video && window.open(event.Video)
+            : () => setModalProps({
+            title: event.Title,
+            onClose: () => setModalProps(null),
+            children: Youtube(event.Video!)
+          }))}
       </Div>
-    </React.Fragment>
-  );
-
-
+    </Div>
+  });
+}
 
 const watchNow = (setModalProps: () => void) =>
   <Button
@@ -54,6 +71,16 @@ const Youtube = (link: string) =>
     title="YouTube video player"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" />  
 
+const getOrdinalSuffix = (date: number) => {
+  if (date > 3 && date < 21) return 'th';
+  switch (date % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+  }
+}
+
 const isUpcoming = (dateString: string) => {
   const [day, month, year] = dateString.split("/").map(Number);
   const date: Date = new Date(year, month - 1, day);
@@ -65,40 +92,79 @@ const isUpcoming = (dateString: string) => {
 }
 
 const styles = {
-  container: {
+  eventsContainer: {  
     display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: "white",
-    padding: "2%",
-    width: ["20vh", "20vh", "40vh"],
-    height: ["40vh", "40vh", "55vh"]
-  },
-  imageContainer: {
-    padding: "5%"
-  },
-  image: {
-    aspectRatio: "1/1",
+    position: "relative",
+    backgroundColor: "#ef7f1b",
+    border: "5px solid #ef7e1b",
     width: "100%",
-    borderRadius: "100%",
-    objectFit: "cover"
+    aspectRatio: ["2", "2", "3"]
   },
-  placeholderImage: {
-    height: ["130px", "130px", "220px"],
-    width: ["150px", "150px", "250px"]
+  eventImage: {
+    display: "flex",
+    flex: ["0.1", "0.3", "0.6"],
+    objectFit: "cover",
+    width: ["40%", "60%", "70%"],
   },
-  text: {
-    textAlign: "center"
+  eventDetailsContainer: {
+    display: "flex",
+    flex: ["0.8", "0.7", "0.4"],
+    padding: "1%",
+    color: "white",
+    flexDirection: "column",
+    gap: "1%"
+  },
+  eventTitle: {
+    fontSize: ["small", "large", "x-large"],
+    fontStyle: "italic"
+  },
+  past: {
+    position: "absolute",
+    padding: "0.5%",
+    bottom: ["-15%", "-10%", "-21%", "-13%"],
+    color: "white",
+    backgroundColor: "rgb(0, 0, 0, 0.5)",
+    fontSize: ["large", "large", "xx-large"],
+    transformOrigin: "0 0",
+    transform: "rotate(-90deg)"
+  },
+  upcoming: {
+    position: "absolute",
+    padding: "0.5%",
+    top: "0",
+    color: "white",
+    backgroundColor: "rgb(0, 0, 0, 0.5)",
+    fontSize: "xx-large",
+  },
+  loader: {
+    alignItems: "center",
+    justifyContent: "center",
+    background: `
+      linear-gradient(to right, white, 95%, transparent)`,
+    backgroundBlendMode: "screen",
   },
   watchNow: {
     display: "flex",
     fontSize: ["small", "small", "large"],
-    justifyContent: "space-between",
-    alignItems: "center",
     borderRadius: "10%",
     backgroundColor: "#e0452c",
     color: "white",
+    alignSelf: "end",
+    justifySelf: "bottom",
     borderColor: "white",
-    cursor: "pointer"
+    cursor: "pointer",
+    marginTop: "auto"
+  },
+  registrationButton: {
+    display: "flex",
+    fontSize: ["small", "small", "large"],
+    borderRadius: "10%",
+    backgroundColor: "indigo",
+    color: "white",
+    alignSelf: "end",
+    justifySelf: "bottom",
+    borderColor: "white",
+    cursor: "pointer",
+    marginTop: "auto"
   }
 } as const;
