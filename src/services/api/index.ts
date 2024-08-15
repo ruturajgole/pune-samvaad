@@ -1,4 +1,4 @@
-import { Form } from "services/models";
+import { Contact, Form } from "services/models";
 
 export const getData = async () => {
   try {
@@ -124,6 +124,30 @@ export const register = async (form: Form) => {
       {
         body: JSON.stringify({
           form
+        }),
+        method: "post",
+        headers: new Headers({
+        "ngrok-skip-browser-warning": "69420",
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      })}
+    );
+
+    return response.status;
+  } catch (error) {
+    return error;
+  }
+}
+
+export const submitContactForm = async (contact: Contact) => {
+  try {
+    const host = getApiUrl();
+
+    const response = await fetch(
+      `${host}/contact`,
+      {
+        body: JSON.stringify({
+          contact
         }),
         method: "post",
         headers: new Headers({

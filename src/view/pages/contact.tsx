@@ -1,21 +1,79 @@
+import { TaskAlt } from "@mui/icons-material";
+import { BaseSyntheticEvent, useState } from "react";
+import { submitContactForm } from "services/api";
+import { Contact } from "services/models";
+import { Loader } from "view/lib";
 import { Button, Div, Text } from "view/lib/components";
 
-const Contact = () =>
-  <Div style={styles.container}>
+enum Status {
+  Unsubmitted,
+  Submitting,
+  Submitted
+}
+
+const ContactUs = () => {
+  const empty: Contact = {
+    name: "",
+    email: "",
+    mobile: "",
+    query: ""
+  };
+
+  const [form, setForm] = useState<Contact>(empty);
+  const [status, setStatus] = useState<Status>(Status.Unsubmitted);
+
+  const onChange = (e: BaseSyntheticEvent) => {
+    const { name, value } = e.target;
+
+    if(name && value){
+      setForm({ ...form, [name]: value });
+    }
+  }
+
+  const submit = async () => {
+    setStatus(Status.Submitting);
+
+    const response = await submitContactForm(form);
+    if(response === 200){
+      setStatus(Status.Submitted);
+    }
+  }
+
+  const clear = () => setForm(empty);
+
+  const Form = () =>
+    <Div style={styles.container}>
     <Text style={styles.title}>Contact Us Form</Text>
     <form style={styles.form}>
-      <input style={styles.input} type="text" name="name" placeholder="Full Name*"/>
+      <input onChange={onChange} style={styles.input} type="text" name="name" placeholder="Full Name*" value={form.name}/>
       <Div style={styles.contact}>
-        <input style={styles.input} type="email" name="email" required placeholder="Email*"/>
-        <input style={styles.input} type="text" name="mobile" required placeholder="Mobile*"/>
+        <input onChange={onChange} style={styles.input} type="email" name="email" required placeholder="Email*" value={form.email}/>
+        <input onChange={onChange} style={styles.input} type="text" name="mobile" required placeholder="Mobile*" value={form.mobile}/>
       </Div>
-      <textarea rows={4} style={{...styles.input, resize: "none"}} name="query" placeholder="Additional Information (Optional)"/>
+      <textarea onChange={onChange} rows={4} style={{...styles.input, resize: "none"}} name="query" placeholder="Additional Information (Optional)" value={form.query}/>
     </form>
     <Div style={styles.buttons}>
-      <input style={styles.submit} type="submit" value="SUBMIT"/>
-      <Button style={styles.button} onClick={() => {}}>Clear</Button>
+      <input style={styles.submit} onClick={submit} type="submit" value="SUBMIT"/>
+      <Button style={styles.button} onClick={clear}>Clear</Button>
     </Div>
   </Div>;
+
+  return (status === Status.Unsubmitted && <Form />) ||
+  (status === Status.Submitting && <Loading />) ||
+  (status === Status.Submitted && <FormSubmitted />) ||
+  <Text>Something Went Wrong</Text>;
+}
+
+const FormSubmitted = () =>
+  <Div style={styles.submitted}>
+    <TaskAlt color="success" fontSize="large" />
+    <Text style={styles.submittedText}>Form Submitted</Text>
+  </Div>
+
+const Loading = () =>
+  <Div style={styles.loader}>
+    <Loader />
+  </Div>
 
 const styles = {
   container: {
@@ -75,7 +133,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100%",
+    flex: "1",
     gap: "1%",
     width: "100%"
   },
@@ -85,4 +143,4 @@ const styles = {
 } as const;
 
 
-export default Contact;
+export default ContactUs;

@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import {
   About,
-  Contact,
+  ContactUs,
   GalleryView,
   Homepage,
   Suggestions
@@ -51,7 +51,7 @@ const App: React.FC = () => {
       (page === Pages.Suggestions &&
         animate(<Suggestions text={data.Suggestions}/>)) || 
       (page === Pages.Contact &&
-        animate(<Contact />)) ||
+        animate(<ContactUs />)) ||
       (page === Pages.Error &&
         animate(<Error error={data.error}/>)))}
     </Suspense>
