@@ -88,7 +88,7 @@ export const getPhoto = async (folderName: string) => {
   }
 }
 
-export const getBanner = async (folderName: string) => {
+export const getBanner = async (folderName: string, isSmallDevice: boolean) => {
   try {
     const host = getApiUrl();
     const formattedFolderName = folderName.replaceAll("'", "\\'");
@@ -97,7 +97,8 @@ export const getBanner = async (folderName: string) => {
       `${host}/banner`,
       {
         body: JSON.stringify({
-          folderName: formattedFolderName
+          folderName: formattedFolderName,
+          isSmallDevice
         }),
         method: "post",
         headers: new Headers({

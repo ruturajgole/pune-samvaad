@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useEffect, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
 import { Event, Form } from "services/models";
 import { Button, Div, Text } from "../components";
 import { PushPin, TaskAlt } from "@mui/icons-material";
@@ -42,7 +42,15 @@ const RegistrationForm = ({ event, onClose }: Props) => {
     setForm({...form, [name]: value});
   }
 
-  const submitForm = async () => {
+  const submitForm = async (e: BaseSyntheticEvent) => {
+    e.preventDefault();
+
+    const currentForm = e.target;
+    if(!currentForm.checkValidity()){
+      currentForm.reportValidity();
+      return;
+    }
+
     setStatus(Status.Submitting);
     const status = await register(form);
 
@@ -51,22 +59,10 @@ const RegistrationForm = ({ event, onClose }: Props) => {
     }
   }
 
-  useEffect(() => {
-    if(status === Status.Submitted){
-      const timeout = setTimeout(onClose, 1000);
-
-      return clearTimeout(timeout);
-    }
-  }, [status])
-
   const askQuestion = `If you have any questions for ${form?.event.Guest}, please feel free to post them here`;
   
   const onFocus = (e: BaseSyntheticEvent) => {
     e.stopPropagation();
-    e.preventDefault();
-    if(e.target.href){
-      window.open(e.target.href, "_blank");
-    }
   };
 
   const loading = status === Status.Submitting;
@@ -81,10 +77,10 @@ const RegistrationForm = ({ event, onClose }: Props) => {
       <Text style={styles.venue}>Venue - <PushPin fontSize="small"/> {event.Venue}</Text>
       {event.Map && <a id="map" href="https://maps.app.goo.gl/sBuRdVn2SjH4YFGb7" target="_blank">Click For Location</a>}
     </Div>
-    <form style={{...styles.form, ...(loading && styles.loading)}}>
+    <form onSubmit={submitForm} id={"form"} style={{...styles.form, ...(loading && styles.loading)}}>
       <input onChange={changeValue} name="email" style={styles.input} type="email" value={form?.email} placeholder="Email*" required />
       <input onChange={changeValue} name="name" style={styles.input} type="text" value={form?.name} placeholder="Full Name*" required />
-      <input onChange={changeValue} name="mobile" style={styles.input} type="text" value={form?.mobile} placeholder="Mobile*" required />
+      <input pattern={"\d{10}"} title={"Please enter a valid 10 digit mobile number"} onChange={changeValue} name="mobile" style={styles.input} type="text" value={form?.mobile} placeholder="Mobile*" required />
       <label htmlFor="student" style={styles.input}>
       <input onChange={changeStudent} name="isStudent" id="student" type="radio" value="student"/>Student</label>
       <label htmlFor="non_student" style={styles.input}>
@@ -92,12 +88,13 @@ const RegistrationForm = ({ event, onClose }: Props) => {
       <input onChange={changeValue} style={styles.input} name="institution" type="text" value={form?.institution} placeholder="Institute/Organization (Studying/Working/Social Org Part of)" required />
       <input onChange={changeValue} style={styles.input} name="questions" type="text" value={form?.questions} placeholder={askQuestion} />
       <Div style={styles.buttons}>
-        <input style={styles.submit} onClick={submitForm} type="submit" value="SUBMIT"/>
+        <input form={"form"} style={styles.submit} type="submit" value="SUBMIT"/>
         <Button style={styles.button} onClick={() => setForm(defaultForm)}>Clear</Button>
       </Div>
     </form></>}
-    {status === Status.Submitted && <Div style={styles.submitted}>
-      <TaskAlt color={"success"} fontSize={"large"}/><Text style={styles.submittedText}>Form Submitted</Text>
+    {status === Status.Submitted &&
+      <Div style={styles.submitted}>
+        <TaskAlt color={"success"} fontSize={"large"}/><Text style={styles.submittedText}>Form Submitted</Text>
       </Div>}
   </Div>
 };

@@ -22,7 +22,7 @@ const Homepage: React.FC<Props> = ({data, setModalProps}: Props) => {
   useEffect(() => {
     const fetchPhoto = async (event: Event): Promise<Event> => {
       try {
-          const data = await getBanner(event.Title);
+          const data = await getBanner(event.Title, isSmallDevice);
           if(data) {return { ...event, banner: data };}
           return event;
         } catch (error) {
@@ -52,13 +52,13 @@ const Homepage: React.FC<Props> = ({data, setModalProps}: Props) => {
   return currentEvent
   ? <EventView event={currentEvent} />
   : (<Div style={styles.container}>
-    <Div style={styles.testimonialsContainer}>
+    <Div style={styles.eventsContainer}>
       <Carousel
         children={eventSlides(updatedEvents || [], isSmallDevice, setModalProps)}
-        interval={5000} />
+        interval={8000} />
     </Div>
-    <Text style={styles.eventsTitle}>Explore Bharat with Pune Samvad</Text>
-    <Div style={styles.eventsContainer}>
+    <Text style={styles.exploreBharatText}>Explore Bharat with Pune Samvad</Text>
+    <Div style={styles.testimonialsContainer}>
       <Carousel
         children={newsSlides(Array(4).fill({name: "News"}))}
         interval={5000} />
@@ -77,23 +77,24 @@ const styles = {
     gap: "2%",
     marginTop: "0.1%"
   },
-  eventsTitle: {
+  exploreBharatText: {
     textAlign: "center",
     fontSize: "x-large"
   },
   eventsContainer: {
-    display: "flex",
-    height: "max-content",
-    padding: "1%",
-    justifyContent: "space-around",
-    alignItems: "center"
-  },
-  testimonialsContainer: {
-    height: "max-content",
-    justifyContent: "center",
+    height: ["max-content"],
+    justifyContent: ["unset", "unset", "center"],
     display: "flex",
     width: "100%"
-  }
+  },
+  testimonialsContainer: {
+    display: "flex",
+    height: ["50vh", "50vh", "max-content"],
+    padding: "1%",
+    justifyContent: "space-around",
+    flexDirection: ["column", "column", "row"],
+    alignItems: "center"
+  },
 } as const;
 
 export default Homepage;

@@ -14,6 +14,11 @@
       *, span, p, button, div, input {
         font-family: "Open Sans", sans-serif;
       }
+      input:required::placeholder {
+        color: red; /* Set the placeholder color for required fields */
+        opacity: 0.5; /* Ensure full opacity for placeholder text */
+        border-color: red;
+      }
       div {
         box-sizing: border-box;
       }
@@ -39,7 +44,7 @@
     </style>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"

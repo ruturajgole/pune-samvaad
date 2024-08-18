@@ -25,12 +25,19 @@ const ContactUs = () => {
   const onChange = (e: BaseSyntheticEvent) => {
     const { name, value } = e.target;
 
-    if(name && value){
-      setForm({ ...form, [name]: value });
-    }
+    setForm({ ...form, [name]: value });
   }
 
-  const submit = async () => {
+  const submit = async (e: BaseSyntheticEvent) => {
+    e.preventDefault();
+
+    const currentForm = e.target;
+
+    if(!currentForm.checkValidity()){
+      currentForm.reportValidity();
+      return;
+    }
+
     setStatus(Status.Submitting);
 
     const response = await submitContactForm(form);
@@ -44,8 +51,8 @@ const ContactUs = () => {
   const Form = () =>
     <Div style={styles.container}>
     <Text style={styles.title}>Contact Us Form</Text>
-    <form style={styles.form}>
-      <input onChange={onChange} style={styles.input} type="text" name="name" placeholder="Full Name*" value={form.name}/>
+    <form id="form" onSubmit={submit} style={styles.form}>
+      <input onChange={onChange} style={styles.input} type="text" name="name" placeholder="Full Name*" value={form.name} required/>
       <Div style={styles.contact}>
         <input onChange={onChange} style={styles.input} type="email" name="email" required placeholder="Email*" value={form.email}/>
         <input onChange={onChange} style={styles.input} type="text" name="mobile" required placeholder="Mobile*" value={form.mobile}/>
@@ -53,7 +60,7 @@ const ContactUs = () => {
       <textarea onChange={onChange} rows={4} style={{...styles.input, resize: "none"}} name="query" placeholder="Additional Information (Optional)" value={form.query}/>
     </form>
     <Div style={styles.buttons}>
-      <input style={styles.submit} onClick={submit} type="submit" value="SUBMIT"/>
+      <input form="form" style={styles.submit} type="submit" value="SUBMIT"/>
       <Button style={styles.button} onClick={clear}>Clear</Button>
     </Div>
   </Div>;
@@ -90,6 +97,7 @@ const styles = {
   },
   contact: {
     display: "flex",
+    flexDirection: ["column", "column", "row"],
     gap: "1%",
     justifyContent: "space-evenly"
   },

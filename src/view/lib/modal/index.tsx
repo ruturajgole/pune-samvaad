@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import animate from '../animated';
+import { Div, Text } from "../components";
 
 export interface ModalProps {
   readonly title: string;
@@ -8,13 +9,13 @@ export interface ModalProps {
 }
 
 export const Modal = ({title, children, onClose}: ModalProps) =>
-  animate(<div onClick={(e) => {e.stopPropagation(); e.preventDefault(); onClose();}} style={styles.container}>
-    <div style={styles.header}>
-      <span>{title}</span>
+  animate(<Div onClick={(e) => {e.stopPropagation(); e.preventDefault(); onClose();}} style={styles.container}>
+    <Div style={styles.header}>
+      <Text style={styles.title}>{title}</Text>
       <CloseIcon onClick={onClose} style={styles.close} fontSize={"large"}/>
-    </div>
+    </Div>
     {children}
-  </div>);
+  </Div>);
 
 const styles = {
   container: {
@@ -27,17 +28,20 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    width: "100%"
+    width: "100%",
+    padding: ["2%", "2%", "0"]
   },
   header: {
     display: "flex",
     justifyContent: "space-between",
     color: "white",
     alignItems: "center",
-    fontSize: "x-large",
     width: "50%"
+  },
+  title: {
+    fontSize: ["medium", "medium", "x-large"],
   },
   close: {
     cursor: "pointer"
   }
-} as Record<string, React.CSSProperties>;
+} as const;
